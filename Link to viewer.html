@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sentence Viewer</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      padding: 20px;
+      margin: 0;
+      background-color: #f7f9fb;
+      color: #222;
+    }
+
+    h5 {
+      margin: 0 0 8px 0;
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    textarea {
+      width: 100%;
+      font-size: 14px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      resize: none;
+      background-color: #fff;
+      transition: border-color 0.3s ease;
+    }
+
+    textarea:focus {
+      border-color: #0078d7;
+      outline: none;
+    }
+
+    button {
+      background-color: #0078d7;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      margin: 4px;
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #005ea6;
+    }
+
+    input[type="file"] {
+      margin: 4px 0;
+    }
+
+    #container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    /* Section Styles */
+    #labelDisplay {
+      flex: 1 1 100%;
+      background-color: #e8f0ff;
+      border-left: 5px solid #0078d7;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    #fileInputs {
+      flex: 1 1 45%;
+      background-color: #eaf9e9;
+      border-left: 5px solid #4caf50;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    #sentenceArea {
+      flex: 1 1 45%;
+      background-color: #fff6e6;
+      border-left: 5px solid #ff9800;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    #matchArea {
+      flex: 1 1 100%;
+      background-color: #fde7e7;
+      border-left: 5px solid #f44336;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    #firstSentenceLabel {
+      margin-top: 8px;
+      font-weight: bold;
+      color: #333;
+      background: #fff;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      display: inline-block;
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      #fileInputs, #sentenceArea {
+        flex: 1 1 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container">
+    <!-- Label navigation -->
+    <div id="labelDisplay">
+      <h5>🧭 Navigate Label Sentences</h5>
+      <button id="prevLabelBtn">Previous Label Sentence</button>
+      <button id="nextLabelBtn">Next Label Sentence</button>
+      <div id="firstSentenceLabel">Show Sentence:</div>
+    </div>
+
+    <!-- File inputs -->
+    <div id="fileInputs">
+      <h5>📂 File Inputs</h5>
+      <input type="file" id="fileInput" accept=".txt">
+      <button id="loadSentencesBtn">Load Sentences</button><br>
+      <input type="file" id="labelFileInput" accept=".txt">
+      <button id="loadLabelBtn">Load Top Sentences</button>
+    </div>
+
+    <!-- Sentence display -->
+    <div id="sentenceArea">
+      <h5>💬 Current Enquiry</h5>
+      <textarea id="currentSentence" placeholder="Current sentence will appear here..."></textarea>
+      <button id="prevBtn">Previous</button>
+      <button id="nextBtn">Next</button>
+    </div>
+
+    <!-- Match area -->
+    <div id="matchArea">
+      <h5>🧩 Matching New Sentence</h5>
+      <textarea id="newSentence" placeholder="Add or modify a matching sentence here..."></textarea>
+      <button id="saveBtn">Match and Save to File</button>
+      <button id="clearBtn">Clear Text Areas</button>
+    </div>
+  </div>
+
+  <script>
+    let sentences = [];
+    let newSentences = [];
+    let currentIndex = 0;
+    let labelSentences = [];
+    let currentLabelIndex = 0;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Attach button events
+      document.getElementById('loadSentencesBtn').addEventListener('click', loadSentences);
+      document.getElementById('loadLabelBtn').addEventListener('click', loadLabelSentences);
+      document.getElementById('nextBtn').addEventListener('click', nextSentence);
+      document.getElementById('prevBtn').addEventListener('click', previousSentence);
+      document.getElementById('saveBtn').addEventListener('click', matchAndSaveToFile);
+      document.getElementById('clearBtn').addEventListener('click', clearTextAreas);
+      document.getElementById('nextLabelBtn').addEventListener('click', nextLabelSentence);
+      document.getElementById('prevLabelBtn').addEventListener('click', previousLabelSentence);
+
+      // Enter key for next sentence
+      document.getElementById('newSentence').addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          nextSentence();
+        }
+      });
+    });
+
+    // === File Loaders ===
+    function loadSentences() {
+      const file = document.getElementById('fileInput').files[0];
+      if (!file) return alert("Please select a file.");
+
+      const reader = new FileReader();
+      reader.onload = e => {
+        sentences = e.target.result.split('\n').filter(s => s.trim() !== '');
+        newSentences = new Array(sentences.length).fill('');
+        currentIndex = 0;
+        displaySentence();
+      };
+      reader.readAsText(file);
+    }
+
+    function loadLabelSentences() {
+      const file = document.getElementById('labelFileInput').files[0];
+      if (!file) return alert("Please select a label file.");
+
+      const reader = new FileReader();
+      reader.onload = e => {
+        labelSentences = e.target.result.split('\n').filter(s => s.trim() !== '');
+        currentLabelIndex = 0;
+        displayLabelSentence();
+      };
+      reader.readAsText(file);
+    }
+
+    // === Sentence Navigation ===
+    function displaySentence() {
+      const cs = document.getElementById('currentSentence');
+      const ns = document.getElementById('newSentence');
+      if (sentences.length > 0) {
+        cs.value = sentences[currentIndex];
+        ns.value = newSentences[currentIndex] || '';
+      } else {
+        cs.value = "No enquiries to display.";
+        ns.value = '';
+      }
+      document.getElementById('prevBtn').disabled = currentIndex === 0;
+      document.getElementById('nextBtn').disabled = currentIndex === sentences.length - 1;
+      ns.focus();
+    }
+
+    function nextSentence() {
+      saveCurrentSentence();
+      if (currentIndex < sentences.length - 1) {
+        currentIndex++;
+        displaySentence();
+      }
+    }
+
+    function previousSentence() {
+      saveCurrentSentence();
+      if (currentIndex > 0) {
+        currentIndex--;
+        displaySentence();
+      }
+    }
+
+    function saveCurrentSentence() {
+      if (sentences.length > 0) {
+        sentences[currentIndex] = document.getElementById('currentSentence').value;
+        newSentences[currentIndex] = document.getElementById('newSentence').value;
+      }
+    }
+
+    // === Label Navigation ===
+    function displayLabelSentence() {
+      const label = document.getElementById('firstSentenceLabel');
+      if (labelSentences.length > 0) {
+        label.textContent = "Show Sentence: " + labelSentences[currentLabelIndex];
+      } else {
+        label.textContent = "No label sentences available.";
+      }
+      document.getElementById('prevLabelBtn').disabled = currentLabelIndex === 0;
+      document.getElementById('nextLabelBtn').disabled = currentLabelIndex === labelSentences.length - 1;
+    }
+
+    function nextLabelSentence() {
+      if (currentLabelIndex < labelSentences.length - 1) {
+        currentLabelIndex++;
+        displayLabelSentence();
+      }
+    }
+
+    function previousLabelSentence() {
+      if (currentLabelIndex > 0) {
+        currentLabelIndex--;
+        displayLabelSentence();
+      }
+    }
+
+    // === Save Matching Sentences ===
+    function matchAndSaveToFile() {
+      saveCurrentSentence();
+      let combined = [];
+      const label = labelSentences[currentLabelIndex] || '';
+
+      if (label.length > 0) combined.push(label);
+      for (let i = 0; i < sentences.length; i++) {
+        const orig = sentences[i];
+        const match = newSentences[i].trim();
+        if (match.length > 0) combined.push(`${orig}\n[${match}]`);
+      }
+
+      if (combined.length === 0) return alert("No matching sentences to save.");
+
+      const blob = new Blob([combined.join('\n\n')], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'matched_sentences.txt';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    function clearTextAreas() {
+      document.getElementById('newSentence').value = '';
+    }
+  </script>
+</body>
+</html>
+
