@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Clinical Symptoms & Signs (Complete Styled)</title>
+<style>
+body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background: #f0f4f8; 
+    margin: 10px; 
+    color: #2c3e50;
+}
+h1 { 
+    text-align: center; 
+    margin-bottom: 15px; 
+    font-size: 24px; 
+    color: #34495e;
+}
+.systems-container { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 12px; 
+}
+.system { 
+    background: white; 
+    padding: 10px 12px; 
+    border-radius: 8px; 
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1); 
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.system:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15); 
+}
+h2 { 
+    background: linear-gradient(90deg, #3498db, #2ecc71); 
+    color: white; 
+    padding: 6px 8px; 
+    border-radius: 5px; 
+    font-size: 16px; 
+    margin: 0 0 5px 0; 
+    text-align: center;
+}
+.label { 
+    font-weight: bold; 
+    margin: 4px 0 2px 0; 
+    font-size: 13px; 
+    color: #34495e;
+}
+.items span { 
+    display: inline-block; 
+    background: #ecf0f1; 
+    padding: 5px 8px; 
+    margin: 3px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    font-size: 12px; 
+    transition: background 0.2s, color 0.2s;
+}
+.items span:hover { 
+    background: #3498db; 
+    color: white; 
+}
+textarea { 
+    width: 100%; 
+    height: 50px; 
+    margin-top: 3px; 
+    background: #fafafa; 
+    font-size: 12px; 
+    resize: vertical; 
+    border: 1px solid #bdc3c7; 
+    border-radius: 5px;
+    padding: 4px;
+}
+button { 
+    padding: 8px 14px; 
+    margin: 5px; 
+    font-size: 13px; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    background: linear-gradient(90deg,#3498db,#2ecc71);
+    color: white;
+    transition: background 0.2s;
+}
+button:hover { 
+    background: linear-gradient(90deg,#2ecc71,#3498db);
+}
+</style>
+</head>
+<body>
+
+<h1>Clinical Symptoms & Signs (Complete Styled)</h1>
+
+<div class="systems-container">
+
+<!-- GENERAL -->
+<div class="system">
+<h2>General / Constitutional</h2>
+<div class="label">Symptoms</div>
+<div class="items">
+<span onclick="addItem('gen_sym','Fever')">Fever</span>
+<span onclick="addItem('gen_sym','Fatigue')">Fatigue</span>
+<span onclick="addItem('gen_sym','Weight loss')">Weight loss</span>
+<span onclick="addItem('gen_sym','Weight gain')">Weight gain</span>
+<span onclick="addItem('gen_sym','Loss of appetite')">Loss of appetite</span>
+<span onclick="addItem('gen_sym','Night sweats')">Night sweats</span>
+</div>
+<textarea id="gen_sym"></textarea>
+<div class="label">Signs</div>
+<div class="items">
+<span onclick="addItem('gen_sign','Pallor')">Pallor</span>
+<span onclick="addItem('gen_sign','Cachexia')">Cachexia</span>
+<span onclick="addItem('gen_sign','Fever')">Fever</span>
+</div>
+<textarea id="gen_sign"></textarea>
+</div>
+
+<!-- CARDIOVASCULAR -->
+<div class="system">
+<h2>Cardiovascular</h2>
+<div class="label">Symptoms</div>
+<div class="items">
+<span onclick="addItem('cv_sym','Chest pain')">Chest pain</span>
+<span onclick="addItem('cv_sym','Dyspnea')">Dyspnea</span>
+<span onclick="addItem('cv_sym','Palpitations')">Palpitations</span>
+<span onclick="addItem('cv_sym','Syncope')">Syncope</span>
+<span onclick="addItem('cv_sym','Leg swelling')">Leg swelling</span>
+</div>
+<textarea id="cv_sym"></textarea>
+<div class="label">Signs</div>
+<div class="items">
+<span onclick="addItem('cv_sign','Hypertension')">Hypertension</span>
+<span onclick="addItem('cv_sign','Raised JVP')">Raised JVP</span>
+<span onclick="addItem('cv_sign','Peripheral edema')">Peripheral edema</span>
+<span onclick="addItem('cv_sign','Heart murmur')">Heart murmur</span>
+</div>
+<textarea id="cv_sign"></textarea>
+</div>
+
+<!-- RESPIRATORY -->
+<div class="system">
+<h2>Respiratory</h2>
+<div class="label">Symptoms</div>
+<div class="items">
+<span onclick="addItem('resp_sym','Shortness of breath')">Shortness of breath</span>
+<span onclick="addItem('resp_sym','Cough')">Cough</span>
+<span onclick="addItem('resp_sym','Hemoptysis')">Hemoptysis</span>
+<span onclick="addItem('resp_sym','Wheezing')">Wheezing</span>
+</div>
+<textarea id="resp_sym"></textarea>
+<div class="label">Signs</div>
+<div class="items">
+<span onclick="addItem('resp_sign','Crackles')">Crackles</span>
+<span onclick="addItem('resp_sign','Wheeze')">Wheeze</span>
+<span onclick="addItem('resp_sign','Cyanosis')">Cyanosis</span>
+<span onclick="addItem('resp_sign','Clubbing')">Clubbing</span>
+</div>
+<textarea id="resp_sign"></textarea>
+</div>
+
+<!-- GASTROINTESTINAL -->
+<div class="system">
+<h2>Gastrointestinal</h2>
+<div class="label">Symptoms</div>
+<div class="items">
+<span onclick="addItem('gi_sym','Abdominal pain')">Abdominal pain</span>
+<span onclick="addItem('gi_sym','Nausea')">Nausea</span>
+<span onclick="addItem('gi_sym','Vomiting')">Vomiting</span>
+<span onclick="addItem('gi_sym','Diarrhea')">Diarrhea</span>
+<span onclick="addItem('gi_sym','Constipation')">Constipation</span>
+</div>
+<textarea id="gi_sym"></textarea>
+<div class="label">Signs</div>
+<div class="items">
+<span onclick="addItem('gi_sign','Abdominal tenderness')">Abdominal tenderness</span>
+<span onclick="addItem('gi_sign','Ascites')">Ascites</span>
+<span onclick="addItem('gi_sign','Hepatomegaly')">Hepatomegaly</span>
+</div>
+<textarea id="gi_sign"></textarea>
+</div>
+
+<!-- NEUROLOGICAL -->
+<div class="system">
+<h2>Neurological</h2>
+<div class="label">Symptoms</div>
+<div class="items">
+<span onclick="addItem('neuro_sym','Headache')">Headache</span>
+<span onclick="addItem('neuro_sym','Seizures')">Seizures</span>
+<span onclick="addItem('neuro_sym','Weakness')">Weakness</span>
+<span onclick="addItem('neuro_sym','Numbness')">Numbness</span>
+</div>
+<textarea id="neuro_sym"></textarea>
+<div class="label">Signs</div>
+<div class="items">
+<span onclick="addItem('neuro_sign','Focal deficit')">Focal deficit</span>
+<span onclick="addItem('neuro_sign','Abnormal reflexes')">Abnormal reflexes</span>
+<span onclick="addItem('neuro_sign','Gait abnormality')">Gait abnormality</span>
+</div>
+<textarea id="neuro_sign"></textarea>
+</div>
+
+<!-- ENDOCRINE -->
+<div class="system">
+<h2>Endocrine</h2>
+<div class="label">Symptoms</div>
+<div class="items">
+<span onclick="addItem('endo_sym','Polyuria')">Polyuria</span>
+<span onclick="addItem('endo_sym','Polydipsia')">Polydipsia</span>
+<span onclick="addItem('endo_sym','Heat intolerance')">Heat intolerance</span>
+<span onclick="addItem('endo_sym','Cold intolerance')">Cold intolerance</span>
+</div>
+<textarea id="endo_sym"></textarea>
+<div class="label">Signs</div>
+<div class="items">
+<span onclick="addItem('endo_sign','Goiter')">Goiter</span>
+<span onclick="addItem('endo_sign','Exophthalmos')">Exophthalmos</span>
+</div>
+<textarea id="endo_sign"></textarea>
+</div>
+
+<!-- RENAL / GENITOURINARY -->
+<div class="system">
+<h2>Genitourinary / Renal</h2>
+<div class="label">Symptoms</div>
+<div class="items">
+<span onclick="addItem('renal_sym','Dysuria')">Dysuria</span>
+<span onclick="addItem('renal_sym','Hematuria')">Hematuria</span>
+<span onclick="addItem('renal_sym','Frequency')">Frequency</span>
+<span onclick="addItem('renal_sym','Flank pain')">Flank pain</span>
+</div>
+<textarea id="renal_sym"></textarea>
+<div class="label">Signs</div>
+<div class="items">
+<span onclick="addItem('renal_sign','Edema')">Edema</span>
+<span onclick="addItem('renal_sign','CVA tenderness')">CVA tenderness</span>
+</div>
+<textarea id="renal_sign"></textarea>
+</div>
+
+<!-- MUSCULOSKELETAL -->
+<div class="system">
+<h2>Musculoskeletal</h2>
+<div class="label">Symptoms</div>
+<div class="items">
+<span onclick="addItem('msk_sym','Joint pain')">Joint pain</span>
+<span onclick="addItem('msk_sym','Morning stiffness')">Morning stiffness</span>
+<span onclick="addItem('msk_sym','Back pain')">Back pain</span>
+</div>
+<textarea id="msk_sym"></textarea>
+<div class="label">Signs</div>
+<div class="items">
+<span onclick="addItem('msk_sign','Joint swelling')">Joint swelling</span>
+<span onclick="addItem('msk_sign','Deformity')">Deformity</span>
+</div>
+<textarea id="msk_sign"></textarea>
+</div>
+
+</div> <!-- end grid -->
+
+<button onclick="saveToText()">Save to Text File</button>
+<button onclick="clearAll()">Clear All</button>
+
+<script>
+function addItem(id,text){
+    let t=document.getElementById(id);
+    let arr=t.value?t.value.split('\n'):[];
+    if(!arr.includes(text)) arr.push(text);
+    t.value=arr.join('\n');
+}
+function saveToText(){
+    let output='';
+    document.querySelectorAll('.system').forEach(sys=>{
+        let systemName=sys.querySelector('h2').innerText;
+        let sym=sys.querySelector('textarea[id$="_sym"]').value.trim();
+        let sign=sys.querySelector('textarea[id$="_sign"]').value.trim();
+        if(sym||sign){
+            output+=systemName+'\n------------------\n';
+            if(sym) output+=sym+'\n\n';
+            if(sign) output+=sign+'\n\n';
+        }
+    });
+    if(!output.trim()){ alert('No data selected to save.'); return; }
+    let today=new Date().toISOString().split('T')[0];
+    let defaultName=today+'_Clinical_Notes.txt';
+    let fileName=prompt('Enter file name:',defaultName);
+    if(!fileName) return;
+    if(!fileName.toLowerCase().endsWith('.txt')) fileName+='.txt';
+    let blob=new Blob([output],{type:'text/plain'});
+    let a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download=fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+function clearAll(){
+    if(confirm('Clear all selections?')) document.querySelectorAll('textarea').forEach(t=>t.value='');
+}
+</script>
+
+</body>
+</html>
+
