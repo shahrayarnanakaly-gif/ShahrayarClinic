@@ -262,12 +262,17 @@ button:hover {
 <button onclick="clearAll()">Clear All</button>
 
 <script>
-function addItem(id,text){
-    let t=document.getElementById(id);
-    let arr=t.value?t.value.split('\n'):[];
+function addItem(id, text){
+    let t = document.getElementById(id);
+    let arr = t.value ? t.value.split('\n') : [];
     if(!arr.includes(text)) arr.push(text);
-    t.value=arr.join('\n');
+    t.value = arr.join('\n');
+
+    // Move cursor to end
+    t.focus();
+    t.selectionStart = t.selectionEnd = t.value.length;
 }
+
 function saveToText(){
     let output='';
     document.querySelectorAll('.system').forEach(sys=>{
